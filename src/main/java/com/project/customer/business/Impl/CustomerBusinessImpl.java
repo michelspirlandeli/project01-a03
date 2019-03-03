@@ -3,9 +3,9 @@ package com.project.customer.business.Impl;
 import com.project.customer.business.CustomerBusiness;
 import com.project.customer.model.Customer;
 import com.project.customer.repository.CustomerRepository;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,28 +26,25 @@ public class CustomerBusinessImpl implements CustomerBusiness {
     }
 
     @Override
-    public Optional<Customer> customerId(@PathVariable(value = "id") Long id) {
-
+    public Optional<Customer> findById(@NonNull final Long id) {
         return customerRepository.findById(id);
     }
 
     @Override
-    public void delete(Long id) {
-        customerId(id);
+    public Optional<Customer> create(@NonNull final Customer customer) {
+        return Optional.of(customerRepository.save(customer));
+    }
+
+    @Override
+    public Optional<Customer> update(@NonNull final Long id, @NonNull final Customer customer) {
+        customerRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(""));
+        customer.setId(id);
+        return Optional.of(customerRepository.save(customer));
+    }
+
+    @Override
+    public void delete(@NonNull final Long id) {
         customerRepository.deleteById(id);
-    }
-
-    @Override
-    public Optional<Customer> create(Customer customer) {
-            this.customerRepository.save(customer);
-            return Optional.of(customer);
-    }
-
-
-
-    @Override
-    public Optional<Customer> up(Customer customer) {
-        this.customerRepository.save(customer);
-        return Optional.of(customer);
     }
 }

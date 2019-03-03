@@ -8,8 +8,12 @@ import java.util.Optional;
 public interface CustomerBusiness {
 
        List<Customer> findAll();
-       Optional<Customer> customerId(Long id);
+
+       Optional<Customer> findById(Long id);
+
        Optional<Customer> create(Customer customer);
+
+       Optional<Customer> update(Long id , Customer customer);
+
        void delete(Long id);
-       Optional<Customer> up(Customer customer);
 }

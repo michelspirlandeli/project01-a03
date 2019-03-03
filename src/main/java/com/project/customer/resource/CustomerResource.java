@@ -13,7 +13,6 @@ import javax.validation.Valid;
 @RequestMapping("v1/customers")
 public class CustomerResource {
 
-
     private final CustomerBusiness customerBusiness;
 
     @Autowired
@@ -22,36 +21,32 @@ public class CustomerResource {
     }
 
     @GetMapping
-    public ResponseEntity<?> findAll(){
+    public ResponseEntity<?> findAll(@RequestParam("cpf") final String cpf){
        return new ResponseEntity<>(customerBusiness.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping(value="v1/customers/{id}")
-    public ResponseEntity<Customer> findById(@PathVariable(value = "id") long id){
-        return new  ResponseEntity(this.customerBusiness.customerId(id).get(), HttpStatus.OK);
+    @GetMapping(value="/{id}")
+    public ResponseEntity<?> findById(@PathVariable final Long id){
+        return new  ResponseEntity<>(this.customerBusiness.findById(id).get(), HttpStatus.OK);
     }
 
-    //@GetMapping("v1/customers?cpf=")
-
-
-    @PostMapping(value="v1/customers")
-    public ResponseEntity<?> save(@Valid @RequestBody  Customer customer) {
+    @PostMapping
+    public ResponseEntity<?> save(@RequestBody final Customer customer) {
         return new ResponseEntity<>(this.customerBusiness.create(customer),HttpStatus.CREATED);
     }
 
-    @PutMapping(value="v1/customers/{id}")
-    public ResponseEntity<?> up(Customer customer) {
-
-        return new ResponseEntity<>(customerBusiness.up(customer), HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable final Long id, @RequestBody final Customer customer) {
+        return new ResponseEntity<>(customerBusiness.update(id, customer), HttpStatus.OK);
     }
 
-//    public ResponseEntity<?> delete(@PathVariable Long id) {
-//        return new ResponseEntity<>(customerBusiness.delete(id),HttpStatus.OK);
-//    }
-
-    @DeleteMapping(value="v1/customers/{id}")
-    public ResponseEntity<?> delete(@PathVariable long id) {
-        this.customerBusiness.delete(id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable final Long id) {
+        customerBusiness.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
+    //@GetMapping("v1/customers?cpf=")
+
 }
