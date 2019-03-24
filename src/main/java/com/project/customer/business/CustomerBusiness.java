@@ -16,4 +16,6 @@ public interface CustomerBusiness {
        Optional<Customer> update(Long id , Customer customer);
 
        void delete(Long id);
+
+       List<Customer> findSerchCpf(String cpf);
 }

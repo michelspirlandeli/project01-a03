@@ -5,10 +5,15 @@ import com.project.customer.model.Customer;
 import com.project.customer.repository.CustomerRepository;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.contains;
+import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.exact;
 
 @Service
 public class CustomerBusinessImpl implements CustomerBusiness {
@@ -30,6 +35,36 @@ public class CustomerBusinessImpl implements CustomerBusiness {
         return customerRepository.findById(id);
     }
 
+
+    @Override
+    public List<Customer> findSerchCpf(@NonNull final String cpf) {
+        return customerRepository.findByCpf(cpf);
+    }
+
+
+    /*
+    @Override
+    public List<Customer> findSerchCpf (@NonNull final String cpf) {
+
+        //select * from customer where cpf = "33313673899"
+        //exatamente
+
+
+        Customer customer = new Customer();
+        customer.setCpf(cpf);
+
+
+        ExampleMatcher matcher = ExampleMatcher.matching().withMatcher("cpf", exact());
+
+
+        Example<Customer> example = Example.of(customer, matcher);
+
+        return customerRepository.findAll(example);
+
+        //return customerRepository.findSerchCpf() ;
+    }
+    */
+
     @Override
     public Optional<Customer> create(@NonNull final Customer customer) {
         return Optional.of(customerRepository.save(customer));
@@ -47,4 +82,8 @@ public class CustomerBusinessImpl implements CustomerBusiness {
     public void delete(@NonNull final Long id) {
         customerRepository.deleteById(id);
     }
+
+
+
+
 }

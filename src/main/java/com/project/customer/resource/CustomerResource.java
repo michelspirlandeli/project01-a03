@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("v1/customers")
@@ -20,9 +22,24 @@ public class CustomerResource {
         this.customerBusiness = customerBusiness;
     }
 
+
     @GetMapping
-    public ResponseEntity<?> findAll(@RequestParam("cpf") final String cpf){
-       return new ResponseEntity<>(customerBusiness.findAll(), HttpStatus.OK);
+    public ResponseEntity<?> findAll(@RequestParam(value = "cpf", required = false) final String cpf){
+
+
+        //quando tiver cpf     = findsearch - cpf vai ser diferente de null - cpf != null
+        //quando nao tiver cpf = findall    - cpf vai ser null              - cpf == null
+
+
+        //  logica ? verdade : falso
+
+        String r = cpf == null ? "Nao Existe cpf" : "Ëxiste cpf";
+        boolean r2 = cpf == null ? Boolean.TRUE : Boolean.FALSE;
+        //cpf == null ? "Nao existe cpf" : Boolean.TRUE; - NAO TEM COMO USAr TERNARIO
+
+
+        List<Customer> resultado = cpf == null ? customerBusiness.findAll() : customerBusiness.findSerchCpf(cpf);
+        return new ResponseEntity<>(resultado, HttpStatus.OK );
     }
 
     @GetMapping(value="/{id}")
@@ -46,7 +63,5 @@ public class CustomerResource {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
-    //@GetMapping("v1/customers?cpf=")
 
 }
